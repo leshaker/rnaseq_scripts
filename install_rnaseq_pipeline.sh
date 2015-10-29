@@ -179,6 +179,8 @@ gunzip ref/gencode.v22.annotation.201503031.gtf.gz
 cd ~/RNAseq_pipeline
 git clone git@github.com:leshaker/rnaseq_scripts.git
 chmod a+x rnaseq_scripts/*.sh
+mv rnaseq_scripts/*.sh ./
+rm -rf rnaseq_scripts/
 
 # print completed message
 clear; echo -e '\n#######################\nInstallation completed!\n#######################\n'
