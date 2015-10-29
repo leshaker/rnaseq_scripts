@@ -96,9 +96,8 @@ ln -s ~/sratoolkit/bin/* ~/bin
 
 # install bam2fastq
 cd ~
-git clone --recursive https://github.com/jhart99/bam2fastq
-cd ~/bam2fastq 
-sed -i '1i#!/usr/bin/python' bam2fastq.py
+git clone --recursive https://github.com/leshaker/bam2fastq.git
+cd ~/bam2fastq
 chmod a+x bam2fastq.py
 ln -s ~/bam2fastq/bam2fastq.py ~/bin/bam2fastq
 cd ~/RNAseq_pipeline
