@@ -20,10 +20,10 @@ sudo yum install -y \
 sudo yum install -y \ 
 	gcc \
 	make \
-	zlib-devel
+	zlib-devel \
 	bzip2 \
 	ncurses-devel \ 
-	ncurses\
+	ncurses \
 	java 
 
 # install docker
