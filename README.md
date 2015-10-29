@@ -1,5 +1,5 @@
 # rnaseq_scripts
-Custom scripts and tools for running the guigolab/grape-nf pipeline
+Custom scripts and tools for running the guigolab/grape-nf pipeline on Amazon EC2 (Amazon Linux AMI) or other CentOS/RedHat machines
 
 ## Installation
 ```bash
