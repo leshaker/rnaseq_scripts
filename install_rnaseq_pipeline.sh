@@ -46,7 +46,7 @@ curl -fsSL get.nextflow.io | bash
 
 sudo mv nextflow /usr/local/bin/
 
-sudo nextflow -self-update
+sudo /usr/local/bin/nextflow -self-update
 sudo chown root /usr/local/bin/nextflow
 sudo chgrp root /usr/local/bin/nextflow
 sudo chmod a+xr /usr/local/bin/nextflow
