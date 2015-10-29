@@ -17,14 +17,14 @@ sudo yum install -y \
 	git
 
 # install gcc, make, zlib, bzip, ncurses, java
-sudo yum install -y \ 
+sudo yum install -y \
 	gcc \
 	make \
 	zlib-devel \
 	bzip2 \
-	ncurses-devel \ 
+	ncurses-devel \
 	ncurses \
-	java 
+	java
 
 # install docker
 curl -sSL https://get.docker.com/ | sh
