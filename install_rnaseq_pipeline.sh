@@ -1,0 +1,180 @@
+#!/bin/bash
+
+sudo yum update -y
+
+# add epel repository
+sudo yum -y install epel-release
+sudo yum repolist
+
+# install docker
+curl -sSL https://get.docker.com/ | sh
+
+# replace docker with current release from github
+sudo service docker stop
+sudo rm /usr/bin/docker
+wget https://get.docker.com/builds/Linux/x86_64/docker-1.8.3 && mv ./docker-1.8.3 ./docker
+chmod a+x docker && sudo chown root:root docker
+sudo mv docker /usr/bin/
+sudo service docker start
+
+# assign user to docker group and reload groups
+sudo usermod -aG docker $USER
+sudo newgrp docker
+# exec sg docker newgrp `id -gn`
+
+# install java
+sudo yum install java -y
+
+# install nextflow
+curl -fsSL get.nextflow.io | bash
+
+sudo mv nextflow /usr/local/bin/
+
+sudo /usr/local/bin/nextflow -self-update
+sudo chown root /usr/local/bin/nextflow
+sudo chgrp root /usr/local/bin/nextflow
+sudo chmod a+xr /usr/local/bin/nextflow
+
+# create folder structure
+mkdir RNAseq_pipeline
+mkdir RNAseq_pipeline/results
+mkdir bin
+
+# add ~/bin to path if necessary
+usr_path=$(echo $PATH | grep -oEi "/home/${USER}/bin")
+if [ -z "$usr_path" ]; then
+	PATH="$HOME/bin:$PATH"
+	echo 'export PATH=$HOME/bin:$PATH' >>~/.bash_profile
+    echo "Added /home/${USER}/bin to PATH"
+    sleep 5
+fi
+
+cd RNAseq_pipeline
+nextflow clone guigolab/grape-nf
+
+# modify cpu and memory settings in grape-nf configuration
+memory_kb=$(cat /proc/meminfo | grep 'MemTotal' | grep -oEi '[0-9]+')
+memory_gb=$((memory_kb/1000000-1))
+cpus=$(nproc)
+sed -i "s/cpus = 4/cpus = $(($cpus/2))/" `find grape-nf/config/ -type f`
+sed -i "s/cpus = 8/cpus = ${cpus}/" `find grape-nf/config/ -type f`
+sed -i "s/memory = '15G'/memory = '$(($memory_gb/2))G'/" `find grape-nf/config/ -type f`
+sed -i "s/memory = '31G'/memory = '$(($memory_gb/3*2))G'/" `find grape-nf/config/ -type f`
+sed -i "s/memory = '62G'/memory = '${memory_gb}G'/" `find grape-nf/config/ -type f`
+
+# install htop
+sudo yum install htop -y
+
+# install nano
+sudo yum install nano -y
+
+# install wget
+sudo yum install wget -y
+
+# install screen
+sudo yum install screen -y
+
+# install parallel gzip
+ sudo yum install pigz -y
+
+# install git
+sudo yum install git -y
+
+# install gcc, make and zlib
+sudo yum install gcc -y
+sudo yum install make -y
+sudo yum install zlib-devel -y
+
+# install sra tools
+wget http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.5.4-1/sratoolkit.2.5.4-1-centos_linux64.tar.gz
+tar xzf sratoolkit.2.5.4-1-centos_linux64.tar.gz
+rm sratoolkit.2.5.4-1-centos_linux64.tar.gz
+mv sratoolkit.2.5.4-1-centos_linux64 ~/sratoolkit
+ln -s ~/sratoolkit/bin/* ~/bin
+
+# install bam2fastq
+cd ~
+git clone --recursive https://github.com/jhart99/bam2fastq
+cd ~/bam2fastq 
+sed -i '1i#!/usr/bin/python' bam2fastq.py
+chmod a+x bam2fastq.py
+ln -s ~/bam2fastq/bam2fastq.py ~/bin/bam2fastq
+cd ~/RNAseq_pipeline
+
+# install genetorrent
+wget https://cghub.ucsc.edu/software/downloads/GeneTorrent/3.8.7/GeneTorrent-download-3.8.7-207-CentOS6.4.x86_64.tar.gz
+tar xzf GeneTorrent-download-3.8.7-207-CentOS6.4.x86_64.tar.gz
+rm GeneTorrent-download-3.8.7-207-CentOS6.4.x86_64.tar.gz
+mv cghub ~/
+
+# install samtools
+sudo yum install bzip2 -y
+sudo yum install ncurses-devel ncurses -y
+wget https://github.com/samtools/samtools/releases/download/1.2/samtools-1.2.tar.bz2
+tar xvf samtools-1.2.tar.bz2
+rm samtools-1.2.tar.bz2
+mv samtools-1.2 ~/samtools
+cd ~/samtools
+make
+ln -s ~/samtools/samtools ~/bin/
+
+# install bedtools
+wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
+tar xzf bedtools-2.25.0.tar.gz
+rm bedtools-2.25.0.tar.gz
+mv bedtools2 ~/
+cd ~/bedtools2
+make
+ln -s ~/bedtools2/bin/bedtools ~/bin/
+cd ~/RNAseq_pipeline
+
+# install GNU parallel
+cd ~
+wget http://ftpmirror.gnu.org/parallel/parallel-20150922.tar.bz2
+bzip2 -dc parallel-20150922.tar.bz2 | tar xvf -
+rm parallel-20150922.tar.bz2
+mv parallel-20150922 parallel && cd parallel
+./configure --prefix=$HOME && make && make install
+cd ~/RNAseq_pipeline
+
+# pull docker images
+sudo service docker start
+docker pull grape/contig:rgcrg-0.1
+docker pull grape/mapping:star-2.4.0j
+docker pull grape/quantification:rsem-1.2.21
+docker pull grape/inferexp:rseqc-2.3.9
+
+# copy files for test case
+mkdir data
+mkdir ref
+cp grape-nf/data/* ./data/
+cp grape-nf/test-index* ./
+
+nextflow run grape-nf -profile starrsem --index test-index.txt --genome data/genome.fa --annotation data/annotation.gtf -resume
+sleep 5
+
+nextflow run grape-nf -profile starrsem --index test-index-wbam.txt --genome data/genome.fa --annotation data/annotation.gtf -resume
+mv data/test2_m4_n10_toGenome.bam data/test2_m4_n10.bam  
+sleep 5
+
+clear
+cat $(find work/ -type f | grep command.err)
+
+sudo rm -rf work
+
+docker images
+
+sleep 5
+
+##### download hg19 GR38 reference genome
+cd ~/RNAseq_pipeline
+wget ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
+mv GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz ref/GRCh38_no_alt_analysis_set.201503031.fa.gz
+gunzip ref/GRCh38_no_alt_analysis_set.201503031.fa.gz
+
+wget ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.fai
+mv GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.fai ref/GRCh38_no_alt_analysis_set.201503031.fa.fai
+
+wget ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_22/gencode.v22.annotation.gtf.gz 
+mv gencode.v22.annotation.gtf.gz ref/gencode.v22.annotation.201503031.gtf.gz 
+gunzip ref/gencode.v22.annotation.201503031.gtf.gz
