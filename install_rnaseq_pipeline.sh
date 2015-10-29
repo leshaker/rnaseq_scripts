@@ -1,10 +1,30 @@
 #!/bin/bash
 
+# add epel repository
+sudo yum install -y epel-release
+sudo yum repolist
+
+# update packages
 sudo yum update -y
 
-# add epel repository
-sudo yum -y install epel-release
-sudo yum repolist
+# install htop,nano, wget, screen, git, pigz
+sudo yum install -y \
+	htop \
+	nano \
+	wget \
+	screen \
+	pigz \
+	git
+
+# install gcc, make, zlib, bzip, ncurses, java
+sudo yum install -y \ 
+	gcc \
+	make \
+	zlib-devel
+	bzip2 \
+	ncurses-devel \ 
+	ncurses\
+	java 
 
 # install docker
 curl -sSL https://get.docker.com/ | sh
@@ -19,18 +39,14 @@ sudo service docker start
 
 # assign user to docker group and reload groups
 sudo usermod -aG docker $USER
-sudo newgrp docker
-# exec sg docker newgrp `id -gn`
-
-# install java
-sudo yum install java -y
+newgrp docker
 
 # install nextflow
 curl -fsSL get.nextflow.io | bash
 
 sudo mv nextflow /usr/local/bin/
 
-sudo /usr/local/bin/nextflow -self-update
+sudo nextflow -self-update
 sudo chown root /usr/local/bin/nextflow
 sudo chgrp root /usr/local/bin/nextflow
 sudo chmod a+xr /usr/local/bin/nextflow
@@ -49,6 +65,7 @@ if [ -z "$usr_path" ]; then
     sleep 5
 fi
 
+# install grape-nf pipeline
 cd RNAseq_pipeline
 nextflow clone guigolab/grape-nf
 
@@ -61,29 +78,6 @@ sed -i "s/cpus = 8/cpus = ${cpus}/" `find grape-nf/config/ -type f`
 sed -i "s/memory = '15G'/memory = '$(($memory_gb/2))G'/" `find grape-nf/config/ -type f`
 sed -i "s/memory = '31G'/memory = '$(($memory_gb/3*2))G'/" `find grape-nf/config/ -type f`
 sed -i "s/memory = '62G'/memory = '${memory_gb}G'/" `find grape-nf/config/ -type f`
-
-# install htop
-sudo yum install htop -y
-
-# install nano
-sudo yum install nano -y
-
-# install wget
-sudo yum install wget -y
-
-# install screen
-sudo yum install screen -y
-
-# install parallel gzip
- sudo yum install pigz -y
-
-# install git
-sudo yum install git -y
-
-# install gcc, make and zlib
-sudo yum install gcc -y
-sudo yum install make -y
-sudo yum install zlib-devel -y
 
 # install sra tools
 wget http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.5.4-1/sratoolkit.2.5.4-1-centos_linux64.tar.gz
@@ -108,8 +102,6 @@ rm GeneTorrent-download-3.8.7-207-CentOS6.4.x86_64.tar.gz
 mv cghub ~/
 
 # install samtools
-sudo yum install bzip2 -y
-sudo yum install ncurses-devel ncurses -y
 wget https://github.com/samtools/samtools/releases/download/1.2/samtools-1.2.tar.bz2
 tar xvf samtools-1.2.tar.bz2
 rm samtools-1.2.tar.bz2
@@ -159,14 +151,9 @@ sleep 5
 
 clear
 cat $(find work/ -type f | grep command.err)
-
 sudo rm -rf work
 
-docker images
-
-sleep 5
-
-##### download hg19 GR38 reference genome
+# download hg19 GR38 reference genome
 cd ~/RNAseq_pipeline
 wget ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
 mv GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz ref/GRCh38_no_alt_analysis_set.201503031.fa.gz
@@ -178,3 +165,11 @@ mv GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.fai ref/GRCh38_no_alt_analysi
 wget ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_22/gencode.v22.annotation.gtf.gz 
 mv gencode.v22.annotation.gtf.gz ref/gencode.v22.annotation.201503031.gtf.gz 
 gunzip ref/gencode.v22.annotation.201503031.gtf.gz
+
+# install custom pipeline scripts
+cd ~/RNAseq_pipeline
+git clone git@github.com:leshaker/rnaseq_scripts.git
+chmod a+x rnaseq_scripts/*.sh
+
+# print completed message
+clear; echo -e '\n#######################\nInstallation completed!\n#######################\n'
