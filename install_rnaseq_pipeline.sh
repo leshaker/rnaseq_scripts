@@ -56,28 +56,36 @@ mkdir RNAseq_pipeline
 mkdir RNAseq_pipeline/results
 mkdir bin
 
-# add ~/bin to path if necessary
-usr_path=$(echo $PATH | grep -oEi "/home/${USER}/bin")
+# add $HOME/bin to path if necessary
+usr_path=$(echo $PATH | grep -oEi "$HOME/bin")
 if [ -z "$usr_path" ]; then
 	PATH="$HOME/bin:$PATH"
 	echo 'export PATH=$HOME/bin:$PATH' >>~/.bash_profile
-    echo "Added /home/${USER}/bin to PATH"
+    echo "Added $HOME/bin to PATH"
     sleep 5
 fi
 
 # install grape-nf pipeline
-cd RNAseq_pipeline
+cd ~/RNAseq_pipeline
 nextflow clone guigolab/grape-nf
 
 # modify cpu and memory settings in grape-nf configuration
 memory_kb=$(cat /proc/meminfo | grep 'MemTotal' | grep -oEi '[0-9]+')
 memory_gb=$((memory_kb/1000000-1))
+
 cpus=$(nproc)
-sed -i "s/cpus = 4/cpus = $(($cpus/2))/" `find grape-nf/config/ -type f`
-sed -i "s/cpus = 8/cpus = ${cpus}/" `find grape-nf/config/ -type f`
-sed -i "s/memory = '15G'/memory = '$(($memory_gb/2))G'/" `find grape-nf/config/ -type f`
-sed -i "s/memory = '31G'/memory = '$(($memory_gb/3*2))G'/" `find grape-nf/config/ -type f`
-sed -i "s/memory = '62G'/memory = '${memory_gb}G'/" `find grape-nf/config/ -type f`
+if [[ "$cpus">1 ]]; then
+	cpus_half=$(($cpus/2))
+else
+	cpus_half=$cpus
+fi
+
+config_files=$(find grape-nf/config/ -type f)
+sed -i "s/cpus = 4/cpus = ${cpus_half}/" $config_files
+sed -i "s/cpus = 8/cpus = ${cpus}/" $config_files
+sed -i "s/memory = '15G'/memory = '$(($memory_gb/2))G'/" $config_files
+sed -i "s/memory = '31G'/memory = '$(($memory_gb/3*2))G'/" $config_files
+sed -i "s/memory = '62G'/memory = '${memory_gb}G'/" $config_files
 
 # install sra tools
 wget http://ftp-trace.ncbi.nlm.nih.gov/sra/sdk/2.5.4-1/sratoolkit.2.5.4-1-centos_linux64.tar.gz
@@ -142,6 +150,7 @@ mkdir ref
 cp grape-nf/data/* ./data/
 cp grape-nf/test-index* ./
 
+# run test case
 nextflow run grape-nf -profile starrsem --index test-index.txt --genome data/genome.fa --annotation data/annotation.gtf -resume
 sleep 5
 
