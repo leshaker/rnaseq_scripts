@@ -1,10 +1,18 @@
 # rnaseq_scripts
 Custom scripts and tools for running the guigolab/grape-nf pipeline on Amazon EC2 (Amazon Linux AMI) or other CentOS/RedHat machines
 
+## Requirements
+- System running CentOS 6.7/7 or Amazon Linux AMI
+- at least 8 cores
+- at least 32GB RAM
+- approximately 50GB of free disk space per raw data file
+
 ## Installation
+Run the following command in a shell on the machine where you want to process your data
 ```bash
 curl -fsSL https://github.com/leshaker/rnaseq_scripts/raw/master/install_rnaseq_pipeline.sh | bash
 ```
+The script will install all dependencies and tools needed for processing files from GEO, CCLE or other sources (`.bam`, `.sra` or `.fastq` files).
 
 ## Processing data from CCLE
 Add data sets to the file `CCLE_data.txt` in the following format
