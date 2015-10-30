@@ -54,6 +54,7 @@ sudo chmod a+xr /usr/local/bin/nextflow
 # create folder structure
 mkdir RNAseq_pipeline
 mkdir RNAseq_pipeline/results
+mkdir RNAseq_pipeline/logs
 mkdir bin
 
 # add $HOME/bin to path if necessary
