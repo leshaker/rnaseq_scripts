@@ -6,11 +6,8 @@ Custom scripts and tools for running the guigolab/grape-nf pipeline on Amazon EC
 curl -fsSL https://github.com/leshaker/rnaseq_scripts/raw/master/install_rnaseq_pipeline.sh | bash
 ```
 
-## Processing data from GEO
-
-
 ## Processing data from CCLE
-Add data sets to the file `CCLE_data.txt` in the following shape
+Add data sets to the file `CCLE_data.txt` in the following format
 ```txt
 e2280d6e-7ed4-4749-a9e2-f7bd0a810c0c	G27222.769-P.1.bam
 166efd97-7b71-4089-be92-d8d006f86c3b	G20495.786-O.2.bam
