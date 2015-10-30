@@ -107,6 +107,8 @@ wget https://cghub.ucsc.edu/software/downloads/GeneTorrent/3.8.7/GeneTorrent-dow
 tar xzf GeneTorrent-download-3.8.7-207-CentOS6.4.x86_64.tar.gz
 rm GeneTorrent-download-3.8.7-207-CentOS6.4.x86_64.tar.gz
 mv cghub ~/
+wget https://cghub.ucsc.edu/software/downloads/cghub_public.key 
+mv cghub_public.key ~/RNAseq_pipeline
 
 # install samtools
 wget https://github.com/samtools/samtools/releases/download/1.2/samtools-1.2.tar.bz2
