@@ -10,7 +10,7 @@ echo -n > CCLE_index.txt
 echo -n > download_job.sh
 while read line; do
 	echo -e "./download_CCLE_data.sh $line" >> download_job.sh
-done < first_batch.txt
+done < CCLE_data.txt
 
 parallel -j $cpus < download_job.sh
 
