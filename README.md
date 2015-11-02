@@ -14,11 +14,25 @@ curl -fsSL https://github.com/leshaker/rnaseq_scripts/raw/master/install_rnaseq_
 ```
 The script will install all dependencies and tools needed for processing files from GEO, CCLE or other sources (`.bam`, `.sra` or `.fastq` files).
 
+## Processing data from GEO
+Add data sets to the file `GEO_data.txt` in the following format
+```txt
+SRR2537160 GSM1898288_polycysticstemcell_expansionmedium_1_17p6
+```
+where the first part represenst the *SRA run identifier* from [SRA](http://www.ncbi.nlm.nih.gov/sra) and the second is the filename (ideally containing the GEO or SRA identifier).
+
+Then run the script `run_loop_GEO.sh` for downloading, converting and processing all files in the `CCLE_data.txt` file.
+```
+cd ~/RNAseq_pipeline
+./run_loop_GEO.sh
+```
+Consider running the command within a `screen` as the processing will take about 4h per file (on 36 core, 60GB RAM machine).
+
 ## Processing data from CCLE
 Add data sets to the file `CCLE_data.txt` in the following format
 ```txt
-e2280d6e-7ed4-4749-a9e2-f7bd0a810c0c	G27222.769-P.1.bam
-166efd97-7b71-4089-be92-d8d006f86c3b	G20495.786-O.2.bam
+b39b60cd-ed66-4824-9548-6e1396da753c	G20463.C2BBe1.2.bam
+e6b5d8f8-76ac-4598-954a-aadbf4306afa	G27383.CL-40.1.bam
 ```
 where the first part represenst the *Analysis Id* and the second is the *Filename* from the [CGHub Browser](https://browser.cghub.ucsc.edu/search/?platform=%28ILLUMINA%29&state=%28live%29&library_strategy=%28RNA-Seq%29&study=%28*Other_Sequencing_Multiisolate%29) 
 
