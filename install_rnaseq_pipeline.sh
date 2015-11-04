@@ -11,16 +11,6 @@ rm -rf rnaseq_scripts/
 # run sudo part of installation
 ./install_rnaseq_pipeline_sudo.sh
 
-# replace docker with current release from github
-sudo service docker stop
-sudo rm /usr/bin/docker
-wget https://get.docker.com/builds/Linux/x86_64/docker-latest 
-mv ./docker-latest ./docker
-chmod a+x docker
-sudo chown root:root docker
-sudo mv docker /usr/bin/
-sudo service docker start
-
 # assign user to docker group and reload groups
 sudo usermod -aG docker $USER
 newgrp docker
