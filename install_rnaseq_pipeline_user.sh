@@ -1,5 +1,18 @@
 #!/bin/bash
 
+# install custom pipeline scripts
+mkdir ~/RNAseq_pipeline
+cd ~/RNAseq_pipeline
+git clone --recursive https://github.com/leshaker/rnaseq_scripts.git
+rm install_rnaseq_pipeline*
+chmod a+x ~/RNAseq_pipeline/rnaseq_scripts/*.sh
+mv ~/RNAseq_pipeline/rnaseq_scripts/*.sh ~/RNAseq_pipeline
+rm -rf rnaseq_scripts/
+
+# install CGHub key file
+wget https://cghub.ucsc.edu/software/downloads/cghub_public.key 
+mv cghub_public.key ~/RNAseq_pipeline
+
 # create folder structure
 mkdir ~/RNAseq_pipeline/results
 mkdir ~/RNAseq_pipeline/logs
@@ -7,7 +20,6 @@ mkdir ~/RNAseq_pipeline/data
 mkdir ~/RNAseq_pipeline/ref
 
 # install grape-nf pipeline
-cd ~/RNAseq_pipeline
 nextflow clone guigolab/grape-nf
 
 # modify cpu and memory settings in grape-nf configuration
@@ -49,7 +61,6 @@ rm ~/RNAseq_pipeline/test-index*
 rm ~/RNAseq_pipeline/data/*
 
 # download hg19 GR38 reference genome
-cd ~/RNAseq_pipeline
 wget ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
 mv GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz ref/GRCh38_no_alt_analysis_set.201503031.fa.gz
 gunzip ref/GRCh38_no_alt_analysis_set.201503031.fa.gz

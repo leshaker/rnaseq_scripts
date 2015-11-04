@@ -80,9 +80,6 @@ sudo ln -s /opt/cghub/libexec/* /usr/local/libexec/
 sudo ln -s /opt/cghub/lib/* /usr/local/lib/
 sudo ln -s /opt/cghub/share/GeneTorrent /usr/local/share/
 
-wget https://cghub.ucsc.edu/software/downloads/cghub_public.key 
-mv cghub_public.key ~/RNAseq_pipeline
-
 # install samtools
 wget https://github.com/samtools/samtools/releases/download/1.2/samtools-1.2.tar.bz2
 tar xvf samtools-1.2.tar.bz2
