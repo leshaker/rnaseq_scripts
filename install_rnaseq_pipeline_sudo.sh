@@ -30,10 +30,10 @@ sudo yum install -y \
 curl -sSL https://get.docker.com/ | sh
 sudo service docker start
 
-# replace docker with current release from github if kernel > 4
+# replace docker with current release from github if kernel > 3.1
 kernel_ver=`uname -r | grep -o -e "^[0-9]\.[0-9]"`
 if (( $(echo "$kernel_ver>3.1" | bc) )); then
-    echo "kernel version larger than 3.1"
+    echo "kernel version > 3.1"
     sudo service docker stop
     sudo rm /usr/bin/docker
     wget https://get.docker.com/builds/Linux/x86_64/docker-latest 

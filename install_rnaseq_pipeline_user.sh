@@ -5,8 +5,8 @@ mkdir ~/RNAseq_pipeline
 cd ~/RNAseq_pipeline
 git clone --recursive https://github.com/leshaker/rnaseq_scripts.git
 rm install_rnaseq_pipeline*
-chmod a+x ~/RNAseq_pipeline/rnaseq_scripts/*.sh
-mv ~/RNAseq_pipeline/rnaseq_scripts/*.sh ~/RNAseq_pipeline
+chmod a+x rnaseq_scripts/*.sh
+mv rnaseq_scripts/*.sh ~/RNAseq_pipeline
 rm -rf rnaseq_scripts/
 
 # install CGHub key file
