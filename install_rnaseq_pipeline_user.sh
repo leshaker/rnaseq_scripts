@@ -4,7 +4,7 @@
 mkdir ~/RNAseq_pipeline
 cd ~/RNAseq_pipeline
 git clone --recursive https://github.com/leshaker/rnaseq_scripts.git
-rm install_rnaseq_pipeline*
+rm rnaseq_scripts/install_rnaseq_pipeline*
 chmod a+x rnaseq_scripts/*.sh
 mv rnaseq_scripts/*.sh ~/RNAseq_pipeline
 rm -rf rnaseq_scripts/
