@@ -46,7 +46,9 @@ fi
 
 # assign user to docker group and reload groups
 sudo usermod -aG docker $USER
+orig_group=`id -g`
 newgrp docker
+newgrp $orig_group
 
 # install nextflow
 curl -fsSL get.nextflow.io | bash

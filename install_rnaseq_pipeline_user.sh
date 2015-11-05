@@ -40,26 +40,6 @@ sed -i "s/memory = '15G'/memory = '$(($memory_gb/2))G'/" $config_files
 sed -i "s/memory = '31G'/memory = '$(($memory_gb/3*2))G'/" $config_files
 sed -i "s/memory = '62G'/memory = '${memory_gb}G'/" $config_files
 
-# copy files for test case
-cp ~/RNAseq_pipeline/grape-nf/data/* ~/RNAseq_pipeline/data/
-cp ~/RNAseq_pipeline/grape-nf/test-index* ~/RNAseq_pipeline/
-
-# run test case
-nextflow run grape-nf -profile starrsem --index test-index.txt --genome data/genome.fa --annotation data/annotation.gtf -resume
-sleep 5
-
-nextflow run grape-nf -profile starrsem --index test-index-wbam.txt --genome data/genome.fa --annotation data/annotation.gtf -resume
-mv data/test2_m4_n10_toGenome.bam data/test2_m4_n10.bam  
-sleep 5
-
-clear
-cat $(find ~/RNAseq_pipeline/work/ -type f | grep command.err)
-sudo rm -rf ~/RNAseq_pipeline/work
-rm ~/RNAseq_pipeline/pipeline*
-rm ~/RNAseq_pipeline/.nextflow.*
-rm ~/RNAseq_pipeline/test-index*
-rm ~/RNAseq_pipeline/data/*
-
 # download hg19 GR38 reference genome
 wget ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh38/seqs_for_alignment_pipelines/GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz
 mv GCA_000001405.15_GRCh38_no_alt_analysis_set.fna.gz ref/GRCh38_no_alt_analysis_set.201503031.fa.gz
