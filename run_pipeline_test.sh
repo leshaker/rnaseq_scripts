@@ -15,7 +15,7 @@ mv data/test2_m4_n10_toGenome.bam data/test2_m4_n10.bam
 sleep 5
 
 ./copy_results.sh
-ll -t results
+ls -lt --color=auto results/
 
 sleep 5
 
