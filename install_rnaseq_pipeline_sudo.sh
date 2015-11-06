@@ -112,6 +112,15 @@ cd parallel
 cd ~
 rm -rf parallel
 
+# install kallisto
+wget https://github.com/pachterlab/kallisto/releases/download/v0.42.4/kallisto_linux-v0.42.4.tar.gz
+tar xzf kallisto_linux-v0.42.4.tar.gz
+rm kallisto_linux-v0.42.4.tar.gz
+sudo mv kallisto_linux-v0.42.4/kallisto /usr/local/bin/
+rm -rf kallisto_linux-v0.42.4
+sudo chown root:wheel /usr/local/bin/kallisto
+sudo chmod a+rw /usr/local/bin/kallisto
+
 # fix permissions
 sudo chown -R root /opt/
 sudo chgrp -R root /opt/
