@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo service docker restart
+
 cd ~/RNAseq_pipeline
 
 # copy files for test case
