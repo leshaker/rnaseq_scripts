@@ -14,6 +14,17 @@ curl -fsSL https://github.com/leshaker/rnaseq_scripts/raw/master/install_rnaseq_
 ```
 The script will install all dependencies and tools needed for processing files from GEO, CCLE or other sources (`.bam`, `.sra` or `.fastq` files).
 
+For installing only the sudo (packages, docker, tools in /opt/) or the user part (pipeline, reference genome etc.), type
+```bash
+curl -fsSL https://github.com/leshaker/rnaseq_scripts/raw/master/install_rnaseq_pipeline_sudo.sh | bash
+```
+or 
+```bash
+curl -fsSL https://github.com/leshaker/rnaseq_scripts/raw/master/install_rnaseq_pipeline_user.sh | bash
+```
+respectively.
+
+
 ## Processing data from GEO
 Add data sets to the file `GEO_data.txt` in the following format
 ```txt
