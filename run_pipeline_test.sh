@@ -28,3 +28,4 @@ rm pipeline*
 rm .nextflow.*
 rm test-index*
 rm data/*
+rm results/*
