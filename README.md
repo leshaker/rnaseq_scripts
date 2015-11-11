@@ -32,10 +32,10 @@ SRR2537160 GSM1898288_polycysticstemcell_expansionmedium_1_17p6
 ```
 where the first part represenst the *SRA run identifier* from [SRA](http://www.ncbi.nlm.nih.gov/sra) and the second is the filename (ideally containing the GEO or SRA identifier).
 
-Then run the script `run_loop_GEO.sh` for downloading, converting and processing all files in the `CCLE_data.txt` file.
+Then run the script `run_loop.sh` for downloading, converting and processing all files in the `CCLE_data.txt` file.
 ```
 cd ~/RNAseq_pipeline
-./run_loop_GEO.sh
+./run_loop.sh GEO grape
 ```
 Consider running the command within a `screen` as the processing will take about 4h per file (on 36 core, 60GB RAM machine).
 
@@ -47,9 +47,9 @@ e6b5d8f8-76ac-4598-954a-aadbf4306afa	G27383.CL-40.1.bam
 ```
 where the first part represenst the *Analysis Id* and the second is the *Filename* from the [CGHub Browser](https://browser.cghub.ucsc.edu/search/?platform=%28ILLUMINA%29&state=%28live%29&library_strategy=%28RNA-Seq%29&study=%28*Other_Sequencing_Multiisolate%29) 
 
-Then run the script `run_loop_CCLE.sh` for downloading, converting and processing all files in the `CCLE_data.txt` file.
+Then run the script `run_loop.sh` for downloading, converting and processing all files in the `CCLE_data.txt` file.
 ```
 cd ~/RNAseq_pipeline
-./run_loop_CCLE.sh
+./run_loop.sh CCLE grape
 ```
 Consider running the command within a `screen` as the processing will take about 4h per file (on 36 core, 60GB RAM machine).
