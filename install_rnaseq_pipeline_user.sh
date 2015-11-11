@@ -52,5 +52,8 @@ wget ftp://ftp.sanger.ac.uk/pub/gencode/Gencode_human/release_22/gencode.v22.ann
 mv gencode.v22.annotation.gtf.gz ref/gencode.v22.annotation.201503031.gtf.gz 
 gunzip ref/gencode.v22.annotation.201503031.gtf.gz
 
+wget http://bio.math.berkeley.edu/kallisto/transcriptomes/Homo_sapiens.GRCh38.rel79.cdna.all.fa.gz
+mv Homo_sapiens.GRCh38.rel79.cdna.all.fa.gz ref/GRCh38.rel79.cdna.all.fa.gz
+
 # print completed message
 clear; echo -e '\n#######################\nUser part of installation completed!\n#######################\n'
