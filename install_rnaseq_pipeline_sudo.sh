@@ -121,6 +121,18 @@ rm -rf kallisto_linux-v0.42.4
 sudo chown root:wheel /usr/local/bin/kallisto
 sudo chmod a+rw /usr/local/bin/kallisto
 
+# install salmon
+wget https://github.com/COMBINE-lab/salmon/releases/download/v0.5.0/SalmonBeta-0.5.0_DebianSqueeze.tar.gz
+tar xzf SalmonBeta-0.5.0_DebianSqueeze.tar.gz
+rm SalmonBeta-0.5.0_DebianSqueeze.tar.gz
+sudo mv SalmonBeta-0.5.0_DebianSqueeze/bin/salmon /usr/local/bin/
+sudo mv SalmonBeta-0.5.0_DebianSqueeze/lib/* /usr/local/lib/
+rm -rf SalmonBeta-0.5.0_DebianSqueeze
+sudo chown root:wheel /usr/local/bin/salmon
+sudo chmod a+rw /usr/local/bin/salmon
+sudo chown root:wheel /usr/local/lib/
+sudo chmod a+rw /usr/local/lib/
+
 # fix permissions
 sudo chown -R root /opt/
 sudo chgrp -R root /opt/

@@ -44,9 +44,9 @@ elif [ "$pipeline" == "kallisto" ]; then
 	echo -e " running pseudoalignment and quantification using kallisto"
 	echo -e "*************************************************************************\n\n"
 	# generate genome index if necessary
-	if [ ! -f "ref/GRCh38_rel79_cdna_all_index" ]; then
+	if [ ! -f "ref/GRCh38_rel79_cdna_all_kallisto_index" ]; then
 		echo "generating genome index"
-		kallisto index -i ref/GRCh38_rel79_cdna_all_index ref/GRCh38.rel79.cdna.all.fa.gz
+		kallisto index -i ref/GRCh38_rel79_cdna_all_kallisto_index ref/GRCh38.rel79.cdna.all.fa
 	fi
 
 	# iterate over all fastq files in GEO/CCLE_index.txt and run pipeline
@@ -57,10 +57,10 @@ elif [ "$pipeline" == "kallisto" ]; then
 			if [[ nlines -eq 2 ]]; then
 				fastqfile1=$(cat index.txt | cut -d' ' -f3 | grep "_1.fastq")
 				fastqfile2=$(cat index.txt | cut -d' ' -f3 | grep "_2.fastq")
-				kallisto quant --plaintext --bias -t ${cpus} -i ref/GRCh38_rel79_cdna_all_index -o results/$samplename $fastqfile1 $fastqfile2
+				kallisto quant --plaintext --bias -t ${cpus} -i ref/GRCh38_rel79_cdna_all_kallisto_index -o results/$samplename $fastqfile1 $fastqfile2
 			else
 				fastqfile=$(cat index.txt | cut -d' ' -f3 | grep ".fastq")
-				kallisto quant --plaintext --single --bias -t ${cpus} -i ref/GRCh38_rel79_cdna_all_index -o results/$samplename $fastqfile
+				kallisto quant --plaintext --single --bias -t ${cpus} -i ref/GRCh38_rel79_cdna_all_kallisto_index -o results/$samplename $fastqfile
 			fi
 			echo ""
 			echo "done!"
