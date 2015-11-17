@@ -1,11 +1,10 @@
 #!/bin/bash
-# inputs: datasource pipeline
+# inputs: 
+# datasource [CCLE]/GEO/USER 
+# pipeline [grape]/kallisto 
+# delete_data [false]/true
+
 set -e
-
-# get number of cores
-cpus=$(nproc)
-
-echo -n > index.txt
 
 source_options="CCLE GEO USER"
 if [ -z "$1" ] || [[ ! "$source_options" =~ "$1" ]]; then
@@ -21,6 +20,17 @@ else
 	pipeline=$2
 fi
 
+if [ -z "$3" ]; then
+	delete_data=false
+else
+	delete_data=$3
+fi
+
+# get number of cores
+cpus=$(nproc)
+
+echo -n > index.txt
+
 if [ "$pipeline" == "grape" ]; then
 	echo -e "\n\n*************************************************************************"
 	echo -e " running grape-nf pipeline using STAR and RSEM"
@@ -34,9 +44,13 @@ if [ "$pipeline" == "grape" ]; then
 			echo ""
 			echo "done!"
 			echo ""
-			echo -n > index.txt
 			./copy_results.sh
+			if $delete_data; then
+				files=$(cut -d' ' -f3 index.txt)
+				rm $files
+			fi
 			echo ""
+			echo -n > index.txt
 		else		
 			echo $line >> index.txt
 		fi
@@ -68,6 +82,10 @@ elif [ "$pipeline" == "kallisto" ]; then
 			echo ""
 			echo "done!"
 			echo ""
+			if $delete_data; then
+				files=$(cut -d' ' -f3 index.txt)
+				rm $files
+			fi
 			echo -n > index.txt
 		else
 			echo $line >> index.txt

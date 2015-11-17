@@ -1,5 +1,9 @@
 #!/bin/bash
-# inputs: datasource id filename
+# inputs: 
+# datasource [CCLE]/GEO/USER 
+# id 
+# filename
+
 set -e
 
 source_options="CCLE GEO USER"
