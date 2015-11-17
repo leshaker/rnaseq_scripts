@@ -18,15 +18,13 @@ echo -e "**********************************************\n\n"
 # get number of cores
 cpus=$(nproc)
 
-# download all fastq/bam files in GEO/CCLE_data.txt
 echo -n > ${datasource}_index.txt
-
 echo -n > download_job.sh
 
+# run download_data.sh for each line in GEO/CCLE_data.txt in parallel
 while read line; do
 	echo -e "./download_data.sh $datasource $line" >> download_job.sh
 done < ${datasource}_data.txt
-
 parallel -j $cpus < download_job.sh
 
 exit 0

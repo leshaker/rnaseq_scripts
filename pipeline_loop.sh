@@ -37,19 +37,18 @@ if [ "$pipeline" == "grape" ]; then
 	echo -e "*************************************************************************\n\n"
 
 	sudo service docker restart
-	# iterate over all fastq files in GEO/CCLE_index.txt and run pipeline
+	# iterate over all fastq files in GEO/CCLE/USER_index.txt and run pipeline
 	while read line; do
 		if [ -z "$line" ]; then
 			nextflow run grape-nf -profile starrsem --index index.txt --genome ref/GRCh38_no_alt_analysis_set.201503031.fa --annotation ref/gencode.v22.annotation.201503031.gtf -resume 2>&1 > pipeline.log
-			echo ""
-			echo "done!"
-			echo ""
+			echo -e "\ndone!\n"
 			./copy_results.sh
+			# delete data
 			if $delete_data; then
 				files=$(cut -d' ' -f3 index.txt)
 				rm $files
 			fi
-			echo ""
+			echo -e "\n"
 			echo -n > index.txt
 		else		
 			echo $line >> index.txt
@@ -66,7 +65,7 @@ elif [ "$pipeline" == "kallisto" ]; then
 		kallisto index -i ref/GRCh38_rel79_cdna_all_kallisto_index ref/GRCh38.rel79.cdna.all.fa
 	fi
 
-	# iterate over all fastq files in GEO/CCLE_index.txt and run pipeline
+	# iterate over all fastq files in GEO/CCLE/USER_index.txt and run pipeline
 	while read line; do
 		if [ -z "$line" ]; then
 			nlines=$(cat index.txt | cut -d' ' -f1 | wc -l)
@@ -79,13 +78,16 @@ elif [ "$pipeline" == "kallisto" ]; then
 				fastqfile=$(cat index.txt | cut -d' ' -f3 | grep ".fastq")
 				kallisto quant --plaintext --single --bias -t ${cpus} -i ref/GRCh38_rel79_cdna_all_kallisto_index -o results/$samplename $fastqfile
 			fi
-			echo ""
-			echo "done!"
-			echo ""
+			# rename results files and remove folder
+			mv -f results/${samplename}/abundance.tsv results/${samplename}.kallisto.abundance
+			mv -f results/${samplename}/run_info.json results/${samplename}.kallisto.run_info.json
+			rm -rf results/${samplename}
+			# delete data
 			if $delete_data; then
 				files=$(cut -d' ' -f3 index.txt)
 				rm $files
 			fi
+			echo -e "\ndone!\n"
 			echo -n > index.txt
 		else
 			echo $line >> index.txt
