@@ -66,8 +66,8 @@ elif [ "$datasource" == "CCLE" ]; then
 	echo "CCLE_${fname} successfully downloaded and converted!"
 
 elif [ "$datasource" == "USER" ]; then
-	
-	echo -e "looking for user supplied files in $HOME/RNAseq_pipeline/data/"
+
+	echo -e "looking for user supplied file data/${id}_1/_2.fastq.gz"
 	# rename files and write to USER_index.txt
 	# paired end
 	if [ -f "data/${id}_1.fastq.gz" ] && [ -f "data/${id}_2.fastq.gz" ]; then
