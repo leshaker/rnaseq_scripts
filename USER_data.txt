@@ -1,0 +1,6 @@
+NK0_rep1	Sample1_NK_cells_untreated
+NK0_rep2	Sample2_NK_cells_untreated
+NK0_rep3	Sample3_NK_cells_untreated
+NK5_rep1	Sample1_NK_cells_treated_with_5mg
+NK5_rep2	Sample2_NK_cells_treated_with_5mg
+NK5_rep3	Sample3_NK_cells_treated_with_5mg

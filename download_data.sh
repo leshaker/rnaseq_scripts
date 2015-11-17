@@ -2,7 +2,8 @@
 # inputs: datasource id filename
 set -e
 
-if [ -z "$1" ] || ([ "$1" != "GEO" ] && [ "$1" != "CCLE" ]); then
+source_options="CCLE GEO USER"
+if [ -z "$1" ] || [[ ! "$source_options" =~ "$1" ]]; then
 	datasource="CCLE"
 else
 	datasource=$1
@@ -63,6 +64,23 @@ elif [ "$datasource" == "CCLE" ]; then
 	echo -e "" >> CCLE_index.txt
 
 	echo "CCLE_${fname} successfully downloaded and converted!"
+
+elif [ "$datasource" == "USER" ]; then
+	
+	echo -e "looking for user supplied files in $HOME/RNAseq_pipeline/data/"
+	# rename files and write to USER_index.txt
+	# paired end
+	if [ -f "data/${id}_1.fastq.gz" ] && [ -f "data/${id}_2.fastq.gz" ]; then
+		mv data/${id}_1.fastq.gz data/${fname}_1.fastq.gz
+		mv data/${id}_2.fastq.gz data/${fname}_2.fastq.gz
+		echo -e "${fname}\t ${fname}\t data/${fname}_1.fastq.gz\t fastq FqRd1" >> USER_index.txt
+		echo -e "${fname}\t ${fname}\t data/${fname}_2.fastq.gz\t fastq FqRd2" >> USER_index.txt
+	# single end		
+	elif [ -f "data/${id}_1.fastq.gz" ] && [ ! -f "data/${id}_2.fastq.gz" ]; then
+		mv data/${id}_1.fastq.gz data/${fname}.fastq.gz
+		echo -e "${fname}\t ${fname}\t data/${fname}.fastq.gz\t fastq FqRd" >> USER_index.txt
+	fi
+	echo -e "" >> USER_index.txt
 fi
 
 exit 0

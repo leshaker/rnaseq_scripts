@@ -2,7 +2,8 @@
 # inputs: datasource
 set -e
 
-if [ -z "$1" ] || ([ "$1" != "GEO" ] && [ "$1" != "CCLE" ]); then
+source_options="CCLE GEO USER"
+if [ -z "$1" ] || [[ ! "$source_options" =~ "$1" ]]; then
 	datasource="CCLE"
 else
 	datasource=$1

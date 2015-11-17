@@ -7,12 +7,15 @@ cpus=$(nproc)
 
 echo -n > index.txt
 
-if [ -z "$1" ] || ([ "$1" != "GEO" ] && [ "$1" != "CCLE" ]); then
+source_options="CCLE GEO USER"
+if [ -z "$1" ] || [[ ! "$source_options" =~ "$1" ]]; then
 	datasource="CCLE"
 else
 	datasource=$1
 fi
-if [ -z "$2" ] || ([ "$2" != "kallisto" ] && [ "$2" != "grape" ]); then
+
+pipeline_options="grape kallisto"
+if [ -z "$2" ] || [[ ! "$pipeline_options" =~ "$2" ]]; then
 	pipeline="grape"
 else
 	pipeline=$2
@@ -70,9 +73,6 @@ elif [ "$pipeline" == "kallisto" ]; then
 			echo $line >> index.txt
 		fi
 	done < ${datasource}_index.txt	
-
-else
-	echo "Please select a vaild pipeline!"
 fi
 
 exit 0
