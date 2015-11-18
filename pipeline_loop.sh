@@ -73,13 +73,14 @@ elif [ "$pipeline" == "kallisto" ]; then
 			if [[ nlines -eq 2 ]]; then
 				fastqfile1=$(cat index.txt | cut -d' ' -f3 | grep "_1.fastq")
 				fastqfile2=$(cat index.txt | cut -d' ' -f3 | grep "_2.fastq")
-				kallisto quant --plaintext --bias -t ${cpus} -i ref/GRCh38_rel79_cdna_all_kallisto_index -o results/$samplename $fastqfile1 $fastqfile2
+				kallisto quant --bias -t ${cpus} -b ${cpus} -i ref/GRCh38_rel79_cdna_all_kallisto_index -o results/$samplename $fastqfile1 $fastqfile2
 			else
-				fastqfile=$(cat index.txt | cut -d' ' -f3 | grep ".fastq")
-				kallisto quant --plaintext --single --bias -t ${cpus} -i ref/GRCh38_rel79_cdna_all_kallisto_index -o results/$samplename $fastqfile
+				fastqfile=$(cat index.txt | cut -d' ' -f3 | grep ".fastq") 
+				kallisto quant --single --bias -t ${cpus} -b ${cpus} -i ref/GRCh38_rel79_cdna_all_kallisto_index -o results/$samplename $fastqfile
 			fi
 			# rename results files and remove folder
 			mv -f results/${samplename}/abundance.tsv results/${samplename}.kallisto.abundance
+			mv -f results/${samplename}/abundance.h5 results/${samplename}.kallisto.bootstrap.h5
 			mv -f results/${samplename}/run_info.json results/${samplename}.kallisto.run_info.json
 			rm -rf results/${samplename}
 			# delete data

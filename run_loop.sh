@@ -29,10 +29,20 @@ fi
 # get number of cores
 cpus=$(nproc)
 
+# create tmp directory
+if [ ! -d "tmp" ]; then
+	mkdir tmp
+fi
+
 # split ${datasource}_data.txt into subsets of size $cpus and iterate over them
 cp -rf ${datasource}_data.txt ${datasource}_tmp.txt
-split -l $cpus -d ${datasource}_tmp.txt ${datasource}_tmp
-file_list=$(find . -maxdepth 1 -type f -name "${datasource}_tmp*" | sort)
+split -l $cpus -d ${datasource}_tmp.txt tmp/${datasource}_tmp
+
+# trap keyboard interrupt (control-c)
+trap "{ rm -rf tmp/*; mv -f ${datasource}_tmp.txt ${datasource}_data.txt; exit 1; }" SIGINT SIGTERM
+
+# loop over subsets
+file_list=$(find tmp/ -maxdepth 1 -type f -name "${datasource}_tmp*" | sort)
 for file in $file_list; do
 	mv -f $file ${datasource}_data.txt
 	echo -n > "${datasource}_index.txt"
