@@ -1,6 +1,6 @@
 #!/bin/bash
 
-for i in $(sudo find work/ -type f | grep .exitcode); 
+for i in $(find work/ -type f | grep .exitcode); 
 do
 	if [[ $(cat $i) == 0 ]]
 		then
@@ -15,13 +15,13 @@ do
 		# remove successful runs after copying the results but keep genome folders
 		isgenome="$(cat `find ${i%/*} -maxdepth 4 -type f | grep '.command.sh'`| grep 'runMode genomeGenerate\|rsem-prepare-reference\|samtools faidx GRCh38')"
 		if [[ -z "$isgenome" ]]; then
-			sudo rm -rf ${i%/*}
+			rm -rf ${i%/*}
 			echo "removed successful run ${i%/*}"
 		fi
 	elif [ -s $i ] && [ $(cat $i) != 0 ]
 	  	then
 		# remove failed runs
-	  	sudo rm -rf ${i%/*}
+	  	rm -rf ${i%/*}
 	  	echo "removed failed run ${i%/*}"
   	fi
 done

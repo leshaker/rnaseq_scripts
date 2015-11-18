@@ -20,7 +20,7 @@ mkdir ~/RNAseq_pipeline/data
 mkdir ~/RNAseq_pipeline/ref
 
 # install grape-nf pipeline
-nextflow clone guigolab/grape-nf
+nextflow clone leshaker/grape-nf
 
 # modify cpu and memory settings in grape-nf configuration
 memory_kb=$(cat /proc/meminfo | grep 'MemTotal' | grep -oEi '[0-9]+')

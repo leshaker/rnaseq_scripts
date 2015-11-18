@@ -1,7 +1,5 @@
 #!/bin/bash
 
-sudo service docker restart
-
 cd ~/RNAseq_pipeline
 
 # copy files for test case
@@ -25,9 +23,10 @@ sleep 5
 clear; echo -e "\n*****************************************************\nWarning: This pipeline test will remove all files in \nthe folers 'work', data' and 'results'. \nIf you want to keep these files press 'Ctrl + C' now\n*****************************************************\n"; sleep 20
 
 # remove files
-sudo rm -rf work
+rm -rf work
 rm pipeline*
 rm .nextflow.*
 rm test-index*
-rm data/*
-rm results/*
+rm data/test*
+rm data/*.md5
+rm results/sample1*

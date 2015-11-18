@@ -36,7 +36,6 @@ if [ "$pipeline" == "grape" ]; then
 	echo -e " running grape-nf pipeline using STAR and RSEM"
 	echo -e "*************************************************************************\n\n"
 
-	sudo service docker restart
 	# iterate over all fastq files in GEO/CCLE/USER_index.txt and run pipeline
 	while read line; do
 		if [ -z "$line" ]; then
