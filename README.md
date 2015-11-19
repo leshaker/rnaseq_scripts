@@ -66,9 +66,9 @@ NK5_rep3	Sample3_NK_cells_treated_with_5mg
 ```
 where the first part represents the input filename (withouth `fastq.gz` extension) and the second is the output filename.
 
-Then run the script `run_loop.sh` for downloading, converting and processing all files in the `USER_data.txt` file.
+Then run the script `run_loop.sh` for processing all files in the `USER_data.txt` file.
 ```
 cd ~/RNAseq_pipeline
 ./run_loop.sh USER kallisto
 ```
-Consider running the command within a `screen` as the processing will take about 4h per file (on 36 core, 60GB RAM machine).
+Consider running the command within a `screen` as the processing will take about 2h per file (on 36 core, 60GB RAM machine).
