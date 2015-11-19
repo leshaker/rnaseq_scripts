@@ -29,4 +29,6 @@ rm .nextflow.*
 rm test-index*
 rm data/test*
 rm data/*.md5
+rm data/annotation.gtf
+rm data/genome.fa
 rm results/sample1*
