@@ -78,10 +78,14 @@ elif [ "$pipeline" == "kallisto" ]; then
 				kallisto quant --single --bias -t ${cpus} -b ${cpus} -i ref/GRCh38_rel79_cdna_all_kallisto_index -o results/$samplename $fastqfile
 			fi
 			# rename results files and remove folder
-			mv -f results/${samplename}/abundance.tsv results/${samplename}.kallisto.abundance
+			mv -f results/${samplename}/abundance.tsv results/${samplename}.kallisto.isoforms.abundance
 			mv -f results/${samplename}/abundance.h5 results/${samplename}.kallisto.bootstrap.h5
 			mv -f results/${samplename}/run_info.json results/${samplename}.kallisto.run_info.json
 			rm -rf results/${samplename}
+
+			# convert isoform results to gene level
+			./transcripts2gene.sh results/${samplename}.kallisto.isoforms.abundance results/${samplename}.kallisto.genes.abundance
+
 			# delete data
 			if $delete_data; then
 				files=$(cut -d' ' -f3 index.txt)
