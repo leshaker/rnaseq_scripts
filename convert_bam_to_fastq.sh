@@ -18,16 +18,14 @@ rm ${file}.bam
 
 cd $prefix_tmp
 
-fastq1=$data/${prefix}_1.fastq.gz
+fastq1=${data}/${prefix}_1.fastq.gz
 if [ ! -f "$fastq1" ]; then
-	echo "$fastq1 not found!"
 	cat $(find *.1.fq) | gzip > ${prefix}_1.fastq.gz 
 	mv -f ${prefix}_1.fastq.gz ../
 fi
 
-fastq2=$data/${prefix}_2.fastq.gz
+fastq2=${data}/${prefix}_2.fastq.gz
 if [ ! -f "$fastq2" ]; then
-	echo "$fastq2 not found!"
 	cat $(find *.2.fq) | gzip > ${prefix}_2.fastq.gz
 	mv -f ${prefix}_2.fastq.gz ../ 
 fi
